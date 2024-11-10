@@ -62,8 +62,6 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
-      - name: 'Stop Azure Web App'
-        run: az webapp stop --name azuretutorial --resource-group azure_deploy_django
       
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
@@ -72,6 +70,3 @@ jobs:
           app-name: 'azuretutorial'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C3EAD893EDB846AA8BCDB592F1F921CA }}
-
-      - name: 'Start Azure Web App'
-        run: az webapp start --name azuretutorial --resource-group azure_deploy_django
