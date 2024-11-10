@@ -3,7 +3,7 @@ from django.contrib import messages
 from .forms import AdminUserCreationForm
 from .forms import ProductForm
 from .models import Product
-
+from django.contrib.auth import authenticate, login
 
 # ADMIN VIEW START
 
@@ -51,6 +51,21 @@ def admin_addproduct(request):
 
 # Create your views here.
 def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            if user.is_superuser:
+                return redirect('admin_dashboard')  # Assuming this is your URL pattern for the admin dashboard
+            else:
+                return redirect('some_other_dashboard')  # Redirect regular users to their dashboard
+        else:
+            # Handle invalid login attempt
+            return render(request, 'login/login.html', {'error': 'Invalid credentials'})
+    
     return render(request, 'login/login.html')
 
 def home(request):
